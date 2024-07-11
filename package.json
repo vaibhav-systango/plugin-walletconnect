@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -28,9 +29,18 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@wagmi/connectors": "^5.0.22",
+    "@wagmi/core": "^2.11.7",
+    "@walletconnect/core": "^2.13.3",
     "@walletconnect/web3-provider": "^1.8.0",
     "@walletconnect/web3wallet": "^1.12.3",
+    "@web3modal/ethers": "^5.0.6",
+    "@web3modal/wagmi": "^5.0.6",
+    "add": "^2.0.6",
     "ethers": "^6.13.1",
-    "web3modal": "^2.7.0"
+    "node-polyfill-webpack-plugin": "^4.0.0",
+    "viem": "^2.17.3",
+    "web3modal": "^2.7.0",
+    "yarn": "^1.22.22"
   }
 }
