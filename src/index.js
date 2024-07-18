@@ -1,14 +1,14 @@
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers";
-const projectId = "dbd73e79c199916d28293977eeceda66";
+const projectId = "7c2144f0bd609bdae7c2f253510d317d";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 2. Set chains
-  const mainnet = {
-    chainId: 1,
-    name: "Ethereum",
+  const sepolia = {
+    chainId: 11155111,
+    name: "Sepolia",
     currency: "ETH",
-    explorerUrl: "https://etherscan.io",
-    rpcUrl: "https://cloudflare-eth.com",
+    explorerUrl: "https://sepolia.etherscan.io",
+    rpcUrl: "https://divine-soft-snowflake.ethereum-sepolia.quiknode.pro/b29c4bc8d75d8755fca06f038936bee3f406cdf3/",
   };
 
   // 3. Create your application's metadata object
@@ -28,25 +28,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     enableEIP6963: true, // true by default
     enableInjected: true, // true by default
     enableCoinbase: true, // true by default
-    rpcUrl: "...", // used for the Coinbase SDK
-    defaultChainId: 1, // used for the Coinbase SDK
+    rpcUrl: "https://divine-soft-snowflake.ethereum-sepolia.quiknode.pro/b29c4bc8d75d8755fca06f038936bee3f406cdf3", // used for the Coinbase SDK
+    defaultChainId: 11155111, // used for the Coinbase SDK
   });
 
   const modal = createWeb3Modal({
     ethersConfig,
-    chains: [mainnet],
+    chains: [sepolia],
     projectId,
     enableAnalytics: true, // Optional - defaults to your Cloud configuration
     enableOnramp: true, // Optional - false as default
   });
   window.modal = modal;
-
-  function handleChange({ provider, providerType, address, error, chainId, isConnected }) {
-    //...
-    console.log(provider, address)
-  }
-
-  modal.subscribeProvider(handleChange)
 
   async function connectWallet() {
     modal.open();
