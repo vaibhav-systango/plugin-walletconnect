@@ -1,49 +1,50 @@
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers";
-const projectId = "7c2144f0bd609bdae7c2f253510d317d";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 2. Set chains
-  const sepolia = {
-    chainId: 11155111,
-    name: "Sepolia",
-    currency: "ETH",
-    explorerUrl: "https://sepolia.etherscan.io",
-    rpcUrl: "https://divine-soft-snowflake.ethereum-sepolia.quiknode.pro/b29c4bc8d75d8755fca06f038936bee3f406cdf3/",
-  };
+  try {
+    if (!wc_config) {
+      console.error("Error: 'wc_config' is not defined. Please ensure that you have defined 'wc_config' with the necessary configuration settings to use WalletConnect features.");
+      return;
+    }
+    const projectId = wc_config.walletConnectPlugin?.projectId ?? "";
 
-  // 3. Create your application's metadata object
-  const metadata = {
-    name: "My Website",
-    description: "My Website description",
-    url: "https://mywebsite.com", // url must match your domain & subdomain
-    icons: ["https://avatars.mywebsite.com/"],
-  };
+    // Create your application's metadata object
+    const pluginMetadata = wc_config.walletConnectPlugin.metadata ?? {};
+    const metadata = {
+      name: pluginMetadata.name ?? "",
+      description: pluginMetadata.description ?? "",
+      url: pluginMetadata.url ?? "", // url must match your domain & subdomain
+      icons: pluginMetadata.icons ?? [""],
+    };
 
-  // 4. Create Ethers config
-  const ethersConfig = defaultConfig({
-    /*Required*/
-    metadata,
+    // Create Ethers config
+    const ethersConfig = defaultConfig({
+      /*Required*/
+      metadata,
 
-    /*Optional*/
-    enableEIP6963: true, // true by default
-    enableInjected: true, // true by default
-    enableCoinbase: true, // true by default
-    rpcUrl: "https://divine-soft-snowflake.ethereum-sepolia.quiknode.pro/b29c4bc8d75d8755fca06f038936bee3f406cdf3", // used for the Coinbase SDK
-    defaultChainId: 11155111, // used for the Coinbase SDK
-  });
+      /*Optional*/
+      enableEIP6963: true, // true by default
+      enableInjected: true, // true by default
+      enableCoinbase: true, // true by default
+      ...(wc_config.walletConnectPlugin.defaultRpcUrl ? { rpcUrl: wc_config.walletConnectPlugin.defaultRpcUrl } : {}), // used for the Coinbase SDK
+      ...(wc_config.walletConnectPlugin.defaultChainId ? { defaultChainId: wc_config.walletConnectPlugin.defaultChainId } : {}), // used for the Coinbase SDK 
+    });
 
-  const modal = createWeb3Modal({
-    ethersConfig,
-    chains: [sepolia],
-    projectId,
-    enableAnalytics: true, // Optional - defaults to your Cloud configuration
-    enableOnramp: true, // Optional - false as default
-  });
-  window.modal = modal;
+    const modal = createWeb3Modal({
+      ethersConfig,
+      chains: wc_config.walletConnectPlugin.chains ?? [{}],
+      projectId,
+      enableAnalytics: true, // Optional - defaults to your Cloud configuration
+      enableOnramp: true, // Optional - false as default
+    });
+    window.modal = modal;
 
-  async function connectWallet() {
-    modal.open();
+    async function connectWallet() {
+      modal.open();
+    }
+
+    document.getElementById("connect").addEventListener("click", connectWallet);
+  } catch (error) {
+    console.error(error);
   }
-
-  document.getElementById("connect").addEventListener("click", connectWallet);
-});
+}); 
