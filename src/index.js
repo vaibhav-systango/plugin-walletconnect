@@ -2,14 +2,14 @@ import { createWeb3Modal, defaultConfig } from "@web3modal/ethers";
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    if (!window.walletConnectPlugin) {
-      console.error("walletConnectPlugin is not defined");
+    if (!wc_config) {
+      console.error("Error: 'wc_config' is not defined. Please ensure that you have defined 'wc_config' with the necessary configuration settings to use WalletConnect features.");
       return;
     }
-    const projectId = window.walletConnectPlugin?.projectId ?? "";
+    const projectId = wc_config.walletConnectPlugin?.projectId ?? "";
 
     // Create your application's metadata object
-    const pluginMetadata = window.walletConnectPlugin.metadata ?? {};
+    const pluginMetadata = wc_config.walletConnectPlugin.metadata ?? {};
     const metadata = {
       name: pluginMetadata.name ?? "",
       description: pluginMetadata.description ?? "",
@@ -26,13 +26,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       enableEIP6963: true, // true by default
       enableInjected: true, // true by default
       enableCoinbase: true, // true by default
-      ...(window.walletConnectPlugin.defaultRpcUrl ? { rpcUrl: window.walletConnectPlugin.defaultRpcUrl } : {}), // used for the Coinbase SDK
-      ...(window.walletConnectPlugin.defaultChainId ? { defaultChainId: window.walletConnectPlugin.defaultChainId } : {}), // used for the Coinbase SDK 
+      ...(wc_config.walletConnectPlugin.defaultRpcUrl ? { rpcUrl: wc_config.walletConnectPlugin.defaultRpcUrl } : {}), // used for the Coinbase SDK
+      ...(wc_config.walletConnectPlugin.defaultChainId ? { defaultChainId: wc_config.walletConnectPlugin.defaultChainId } : {}), // used for the Coinbase SDK 
     });
 
     const modal = createWeb3Modal({
       ethersConfig,
-      chains: window.walletConnectPlugin.chains ?? [{}],
+      chains: wc_config.walletConnectPlugin.chains ?? [{}],
       projectId,
       enableAnalytics: true, // Optional - defaults to your Cloud configuration
       enableOnramp: true, // Optional - false as default
@@ -47,5 +47,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error(error);
   }
-
 }); 
